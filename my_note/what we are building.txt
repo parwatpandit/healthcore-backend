@@ -1,0 +1,283 @@
+HealthCore — Hospital Management System
+What It Is
+A full production grade hospital management system that handles everything a real hospital needs digitally. Patients, doctors, appointments, prescriptions, lab results, billing and emergency alerts all in one system.
+
+Real World Use Case
+NHS, Bupa, Babylon Health, private clinics, GP surgeries all need exactly this kind of system. This is not a toy project — this mirrors what real health tech companies in London actually build and maintain.
+
+Complete Feature List
+Patient Management
+
+Patient registration with full medical profile
+Medical history tracking
+Allergy records
+Emergency contact information
+Patient search and filtering
+Patient portal — patients can log in and see their own records
+
+Doctor Management
+
+Doctor registration and profiles
+Specialisation categories
+Doctor availability schedule
+Doctor patient assignment
+Doctor dashboard
+
+Appointment System
+
+Book appointments with specific doctors
+Available time slot system
+Appointment confirmation
+Appointment cancellation and rescheduling
+Appointment reminders via email automatically
+No show tracking
+
+Prescription Management
+
+Doctors create digital prescriptions
+Medication name, dosage, duration
+Prescription history per patient
+Active prescriptions tracking
+
+Lab Results
+
+Upload and store lab results per patient
+Result status — pending, completed, abnormal
+Doctor reviews and comments on results
+Patient notified when results ready
+
+Billing System
+
+Automatic bill generation after appointment
+Treatment costs
+Insurance claim simulation
+Payment status tracking — paid, unpaid, pending
+Invoice PDF generation
+
+Emergency Alert System
+
+Emergency cases flagged immediately
+Alert sent to available doctors in real time
+Emergency dashboard for staff
+
+Admin Dashboard
+
+View all patients
+View all doctors
+View all appointments
+Block or deactivate accounts
+System wide statistics
+Revenue reports
+
+
+ML Phase
+
+Disease risk prediction based on patient symptoms and history
+Appointment no show prediction based on patient behaviour
+Anomaly detection in lab results
+
+
+Complete Tech Stack
+Backend
+
+Language: Python
+Framework: Django
+API: Django REST Framework
+Authentication: JWT tokens + Django auth
+Password hashing: Django built in with Argon2
+Task queue: Celery with Redis
+PDF generation: WeasyPrint
+Email: Django email with SMTP
+
+Frontend
+
+Framework: React
+Language: TypeScript
+Styling: Tailwind CSS
+Charts: Recharts
+HTTP client: Axios
+State management: React useState and useContext
+
+Database
+
+Primary: PostgreSQL
+Cache: Redis
+ORM: Django ORM
+
+DevOps
+
+Containerisation: Docker
+Orchestration: Docker Compose
+Cloud: AWS EC2 or Railway
+Storage: AWS S3 for lab result files
+
+Testing
+
+Backend: Pytest
+Frontend: React Testing Library
+API testing: Postman
+Browser automation: Selenium
+
+
+Complete Folder Structure
+HealthCore/
+├── manage.py
+├── requirements.txt
+├── Dockerfile
+├── docker-compose.yml
+├── .env
+├── .gitignore
+├── healthcore/
+│   ├── settings.py
+│   ├── urls.py
+│   ├── wsgi.py
+│   └── asgi.py
+├── apps/
+│   ├── users/
+│   │   ├── models.py
+│   │   ├── views.py
+│   │   ├── serializers.py
+│   │   ├── urls.py
+│   │   └── tests.py
+│   ├── patients/
+│   │   ├── models.py
+│   │   ├── views.py
+│   │   ├── serializers.py
+│   │   ├── urls.py
+│   │   └── tests.py
+│   ├── doctors/
+│   │   ├── models.py
+│   │   ├── views.py
+│   │   ├── serializers.py
+│   │   └── urls.py
+│   ├── appointments/
+│   │   ├── models.py
+│   │   ├── views.py
+│   │   ├── serializers.py
+│   │   └── urls.py
+│   ├── prescriptions/
+│   │   ├── models.py
+│   │   ├── views.py
+│   │   ├── serializers.py
+│   │   └── urls.py
+│   ├── lab_results/
+│   │   ├── models.py
+│   │   ├── views.py
+│   │   ├── serializers.py
+│   │   └── urls.py
+│   ├── billing/
+│   │   ├── models.py
+│   │   ├── views.py
+│   │   ├── serializers.py
+│   │   └── urls.py
+│   └── ml/
+│       ├── disease_risk.py
+│       ├── noshows.py
+│       └── train_models.py
+├── frontend/
+│   ├── public/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   ├── hooks/
+│   │   ├── services/
+│   │   ├── types/
+│   │   └── App.tsx
+│   ├── package.json
+│   └── tsconfig.json
+└── tests/
+    ├── test_patients.py
+    ├── test_appointments.py
+    └── test_billing.py
+
+Database Models
+User Model
+
+id, username, email, password, role (patient/doctor/admin), is_active, created_at
+
+Patient Model
+
+id, user, date_of_birth, blood_type, allergies, emergency_contact, medical_history, created_at
+
+Doctor Model
+
+id, user, specialisation, license_number, years_experience, available_days, created_at
+
+Appointment Model
+
+id, patient, doctor, date, time, status, reason, notes, created_at
+
+Prescription Model
+
+id, patient, doctor, appointment, medication, dosage, duration, instructions, created_at
+
+LabResult Model
+
+id, patient, doctor, test_name, result, status, notes, file, created_at
+
+Bill Model
+
+id, patient, appointment, amount, status, insurance_claim, created_at
+
+
+API Endpoints
+Auth
+
+POST /api/register
+POST /api/login
+POST /api/logout
+GET /api/profile
+
+Patients
+
+GET /api/patients
+POST /api/patients
+GET /api/patients/{id}
+PUT /api/patients/{id}
+DELETE /api/patients/{id}
+
+Doctors
+
+GET /api/doctors
+POST /api/doctors
+GET /api/doctors/{id}
+GET /api/doctors/{id}/availability
+
+Appointments
+
+GET /api/appointments
+POST /api/appointments
+PUT /api/appointments/{id}
+DELETE /api/appointments/{id}
+GET /api/appointments/upcoming
+
+Prescriptions
+
+GET /api/prescriptions
+POST /api/prescriptions
+GET /api/prescriptions/{id}
+
+Lab Results
+
+GET /api/lab-results
+POST /api/lab-results
+PUT /api/lab-results/{id}
+
+Billing
+
+GET /api/bills
+POST /api/bills
+GET /api/bills/{id}/pdf
+
+ML
+
+POST /api/ml/disease-risk
+POST /api/ml/noshows-predict
+
+
+Phases To Build In Order
+PhaseFeatureTech Learned1Django setup, models, authDjango basics2Patient and doctor CRUD APIsDjango REST Framework3Appointment booking systemComplex model relationships4React frontend setupReact + TypeScript basics5Connect frontend to backendAxios, API calls6Prescription and lab resultsFile uploads, AWS S37Billing and PDF generationWeasyPrint8Email remindersCelery + Redis9Admin dashboardReact advanced10ML disease predictionScikit-learn11Docker and deploymentDocker Compose12AWS deploymentAWS EC2
+
+Start Instruction For New Chat — HealthCore
+Paste this exactly:
+"I am building HealthCore — a Hospital Management System. Backend is Django + Django REST Framework + PostgreSQL + Redis + Celery. Frontend is React + TypeScript + Tailwind CSS. I want to build it phase by phase exactly like I built SentinelLedger. I am a beginner so explain everything clearly step by step. Start with Phase 1 — Django project setup, database models and basic authentication."
