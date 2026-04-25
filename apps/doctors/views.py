@@ -1,45 +1,32 @@
-from rest_framework import status
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
+from django.db.models import Q
 from .models import Doctor
 from .serializers import DoctorSerializer, DoctorCreateSerializer
 
-@api_view(['GET', 'POST'])
-@permission_classes([IsAuthenticated])
-def doctor_list(request):
-    if request.method == 'GET':
-        doctors = Doctor.objects.all()
-        serializer = DoctorSerializer(doctors, many=True)
-        return Response(serializer.data)
 
-    if request.method == 'POST':
-        serializer = DoctorCreateSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=201)
-        return Response(serializer.errors, status=400)
+class DoctorListCreateView(generics.ListCreateAPIView):
+    permission_classes = [IsAuthenticated]
+
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return DoctorCreateSerializer
+        return DoctorSerializer
+
+    def get_queryset(self):
+        queryset = Doctor.objects.all()
+        search = self.request.query_params.get('search')
+        if search:
+            queryset = queryset.filter(
+                Q(user__username__icontains=search) |
+                Q(specialisation__icontains=search) |
+                Q(license_number__icontains=search) |
+                Q(user__email__icontains=search)
+            )
+        return queryset
 
 
-@api_view(['GET', 'PUT', 'DELETE'])
-@permission_classes([IsAuthenticated])
-def doctor_detail(request, pk):
-    try:
-        doctor = Doctor.objects.get(pk=pk)
-    except Doctor.DoesNotExist:
-        return Response({'error': 'Doctor not found'}, status=404)
-
-    if request.method == 'GET':
-        serializer = DoctorSerializer(doctor)
-        return Response(serializer.data)
-
-    if request.method == 'PUT':
-        serializer = DoctorSerializer(doctor, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=400)
-
-    if request.method == 'DELETE':
-        doctor.user.delete()
-        return Response({'message': 'Doctor deleted successfully'}, status=204)
+class DoctorDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Doctor.objects.all()
+    serializer_class = DoctorSerializer
+    permission_classes = [IsAuthenticated]
