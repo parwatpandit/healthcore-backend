@@ -1,0 +1,18 @@
+[Unit]
+Description=HealthCore Celery Worker
+After=network.target
+
+[Service]
+User=ubuntu
+Group=ubuntu
+WorkingDirectory=/home/ubuntu/healthcore-backend
+Environment="PATH=/home/ubuntu/healthcore-backend/venv/bin"
+EnvironmentFile=/home/ubuntu/healthcore-backend/.env
+ExecStart=/home/ubuntu/healthcore-backend/venv/bin/celery \
+    -A healthcore worker \
+    --loglevel=info \
+    --pool=solo
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

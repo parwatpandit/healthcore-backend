@@ -1,0 +1,20 @@
+[Unit]
+Description=HealthCore Gunicorn Service
+After=network.target
+
+[Service]
+User=ubuntu
+Group=ubuntu
+WorkingDirectory=/home/ubuntu/healthcore-backend
+Environment="PATH=/home/ubuntu/healthcore-backend/venv/bin"
+EnvironmentFile=/home/ubuntu/healthcore-backend/.env
+ExecStart=/home/ubuntu/healthcore-backend/venv/bin/gunicorn \
+    --workers 3 \
+    --bind unix:/home/ubuntu/healthcore-backend/healthcore.sock \
+    healthcore.wsgi:application
+
+ExecReload=/bin/kill -s HUP $MAINPID
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
