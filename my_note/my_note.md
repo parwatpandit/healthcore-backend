@@ -30,3 +30,10 @@ python3 start.py
 6. frontend
 frontend ==> cd /Users/admin/Documents/healthcore-frontend
 npm run dev
+
+7. run both forntend and backend form docker
+==> cd /Users/admin/Documents/HealthCore
+docker-compose up
+ 
+ open in browser:
+ ==> http://localhost
