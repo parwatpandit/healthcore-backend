@@ -1,12 +1,10 @@
 from rest_framework import serializers
 from .models import Appointment
-from apps.patients.serializers import PatientSerializer
-from apps.doctors.serializers import DoctorSerializer
 
 
 class AppointmentSerializer(serializers.ModelSerializer):
-    patient_detail = PatientSerializer(source='patient', read_only=True)
-    doctor_detail = DoctorSerializer(source='doctor', read_only=True)
+    patient_name = serializers.SerializerMethodField()
+    doctor_name = serializers.SerializerMethodField()
 
     class Meta:
         model = Appointment
@@ -14,8 +12,8 @@ class AppointmentSerializer(serializers.ModelSerializer):
             'id',
             'patient',
             'doctor',
-            'patient_detail',
-            'doctor_detail',
+            'patient_name',
+            'doctor_name',
             'appointment_date',
             'appointment_time',
             'status',
@@ -24,9 +22,19 @@ class AppointmentSerializer(serializers.ModelSerializer):
             'created_at',
         ]
         extra_kwargs = {
-            'patient': {'write_only': True},
-            'doctor': {'write_only': True},
+            'patient': {'write_only': False},
+            'doctor': {'write_only': False},
         }
+
+    def get_patient_name(self, obj):
+        first = obj.patient.first_name
+        last = obj.patient.last_name
+        if first and last:
+            return f'{first} {last}'
+        return obj.patient.user.username
+
+    def get_doctor_name(self, obj):
+        return obj.doctor.user.username
 
     def validate(self, data):
         from django.utils import timezone

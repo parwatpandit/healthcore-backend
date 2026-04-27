@@ -9,3 +9,14 @@ python manage.py runserver
 3. run frontend
 cd /Users/admin/Documents/healthcore-frontend
 npm run dev
+
+4. git hub pushing 
+
+path of the folder first==>cd /Users/admin/Documents/healthcore-frontend
+==> git add .
+==>git commit -m "feat(billing): add Phase 7 billing frontend
+
+- Add Billing page with invoice table and status badges
+- Add create invoice modal with dynamic line items
+"
+==>git push origin main
