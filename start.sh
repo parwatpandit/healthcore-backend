@@ -1,6 +1,8 @@
 #!/bin/bash
+# HealthCore — starts all backend services: Django, Celery Worker, Celery Beat
 
 echo "Starting HealthCore..."
+
 
 # Activate venv
 source venv/bin/activate
